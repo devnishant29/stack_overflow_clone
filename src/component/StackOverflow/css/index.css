@@ -1,0 +1,13 @@
+.stack-index {
+  display: flex;
+  min-height: 85vh;
+  min-width: fit-content;
+}
+
+.stack-index-content {
+  display: flex;
+  padding: 0 20px;
+  justify-content: start;
+  width: 100%;
+}
+
