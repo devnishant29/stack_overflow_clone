@@ -27,7 +27,7 @@ function AllQuestions() {
         </div>
 
         <div className="question-answer">
-          <Link>This is question title</Link>
+          <Link to="/question">This is question title </Link>
           <div
             style={{
               width: "98%",
