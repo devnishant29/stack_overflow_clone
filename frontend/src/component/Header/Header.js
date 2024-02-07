@@ -3,9 +3,41 @@ import "./css/Header.css";
 import SearchIcon from "@mui/icons-material/Search";
 import InboxIcon from "@mui/icons-material/Inbox";
 import { Avatar } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/userSlice";
+import { auth } from "../../firebase";
 
 function Header() {
+  const user = useSelector(selectUser);
+  const navigate = useNavigate();
+
+  function stringToColor(string) {
+    let hash = 0;
+    let i;
+
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.substr(-2);
+    }
+    return color;
+  }
+
+  function stringAvatar(name) {
+    return {
+      sx: {
+        bgcolor: name ? stringToColor(name) : "rgba(255,255,255,0.8)",
+      },
+      children: name && `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    };
+  }
+
   return (
     <header>
       <div className="header-container">
@@ -27,7 +59,16 @@ function Header() {
         </div>
         <div className="header-right">
           <div className="header-right-container">
-            <Avatar />
+            <Avatar
+              style={{
+                cursor: "pointer",
+                color: "black",
+              }}
+              {...stringAvatar(user && user.displayName)}
+              onClick={() => {
+                user ? auth.signOut() : navigate("/auth");
+              }}
+            />
             <InboxIcon />
             <svg
               aria-hidden="true"
